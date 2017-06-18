@@ -1,0 +1,23 @@
+<app-menu-superior></app-menu-superior>
+<div class="container main-container">
+  <h4>Empresas</h4>
+  <hr />
+  <a href="#" class="btn btn-primary" [routerLink]="['/empresa-form']" >Nova Empresa</a>
+  <br /><br />
+  <table class="table table-striped" *ngIf="empresas != null && empresas.length>0">
+    <tr>
+      <th>Aplicação</th>
+      <th>Editar</th>
+      <th>Excluir</th>
+    </tr>
+    <tbody>
+      <tr *ngFor='let item of empresas'>
+          <td width="90%">{{item.nome}}</td>
+          <td width="5%"><a href="#" [routerLink]="['/empresa-form/' + item.id]" class="btn btn-primary">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></td>
+          <td width="5%"><a href="#" [routerLink]="['/empresa-form/' + item.id]" class="btn btn-primary">
+          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

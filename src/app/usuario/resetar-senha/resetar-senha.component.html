@@ -1,0 +1,36 @@
+<app-menu-superior></app-menu-superior>
+<div class="container main-container">
+  <h4>Resetar Senha</h4>
+  <hr />
+
+  <form (ngSubmit)="resetar()" novalidate [formGroup]="formulario" >
+    <div class="form-horizontal">
+      <input type="hidden" formControlName="Id" id="Id" />
+      <input type="hidden" formControlName="Code" id="Code" />
+      <app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
+
+      <div class="form-group" [ngClass]="aplicarCssErro(displayMessage.senha)">
+        <label class="col-md-2 control-label" for="senha">Senha</label>
+        <div class="col-md-6">
+          <input class="form-control" id="senha" formControlName="senha" type="password" placeholder="Senha (requerido)" />
+          <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.senha" *ngIf="displayMessage.senha">
+          </app-template-control-form-error>
+        </div>
+      </div>
+
+      <div class="form-group" [ngClass]="aplicarCssErro(displayMessage.confirmeSenha)">
+        <label class="col-md-2 control-label" for="confirmeSenha">Confirme a Senha</label>
+        <div class="col-md-6">
+          <input class="form-control" id="confirmeSenha" formControlName="confirmeSenha" type="password" placeholder="Confirme a Senha" />
+          <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.confirmeSenha" *ngIf="displayMessage.confirmeSenha">
+          </app-template-control-form-error>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-4 col-md-offset-2">
+          <span><button class="btn btn-success" type="submit" [disabled]="!formulario.valid || loading">Resetar</button></span>
+        </div>
+      </div>
+    </div>
+  </form>

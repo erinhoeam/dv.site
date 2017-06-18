@@ -1,0 +1,113 @@
+<app-menu-superior></app-menu-superior>
+<div class="container main-container">
+  <h4>{{title}}</h4>
+  <hr />
+    <form novalidate [formGroup]="formulario" (ngSubmit)="save();" >
+      <div class="form-horizontal">
+        
+        <app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
+
+        <div class="form-group" [ngClass]="aplicarCssErro(displayMessage.nome)">
+          <label class="col-md-2 control-label" for="nome">Nome</label>
+          <div class="col-md-6">
+            <input class="form-control" id="nome" formControlName="nome" type="text" placeholder="Nome (requerido)" />
+            <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.nome" *ngIf="displayMessage.nome">
+            </app-template-control-form-error>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+              <label>
+                <input id="bloqueada" formControlName="bloqueada" type="checkbox" > Bloqueada
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-4 col-md-offset-2">
+            <span><button class="btn btn-success" type="submit" [disabled]="!formulario.dirty || (!formulario.valid || loading)">Salvar</button></span>
+          </div>
+        </div>
+        <br />
+        <br />
+      </div>
+    </form>
+
+    <div *ngIf="empresa.id">
+      <h4>Aplicações</h4>
+      <hr />
+      <form class="form-inline" [formGroup]="formularioAplicacao">
+        <div class="row">
+          <div class="col-md-4">
+            <!--<div class="form-group">-->
+              <label>Aplicações</label>
+              <!--<div class="col-md-10">-->
+                <ng-select #SelectAplicacao [allowClear]="true" [items]="items" placeholder="Selecione Aplicação" 
+                (selected)="selected($event.id)" formControlName="aplicacaoId"></ng-select>
+              <!--</div>-->
+            <!--</div>-->
+          </div>
+          <div class="col-md-3">
+            <!--<div class="form-group">-->
+              <label>Data de Validade</label>
+              <!--<div class="col-md-10">-->
+                <my-date-picker name="dataInicio" [options]="myDatePickerOptions" formControlName="dataValidade"></my-date-picker>
+              <!--</div>-->
+            <!--</div>-->
+          </div>
+          <div class="col-md-2">
+            <div class="col-sm-offset-2 col-sm-10">
+              <div class="checkbox">
+                <label>
+                  <input style="margin-top: 35px;" id="disponivel" formControlName="disponivel" type="checkbox" > Dísponível
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <button style="margin-top: 25px" type="button" class="btn btn-primary" (click)="adicionarAplicacao()">Incluir</button>
+          </div>
+        </div>
+      </form>
+      <br />
+      <table class="table table-striped" >
+        <tr>
+          <th>Aplicação</th>
+          <th>Data Validade</th>
+          <th>Disponível</th>
+          <th>Excluir</th>
+        </tr>
+        <tbody>
+          <tr *ngFor='let item of empresa.empresaAplicacoes'>
+              <td width="75%">{{item.aplicacao.nome}}</td>
+              <td width="15%">{{item.dataValidade | date}}</td>
+              <td width="15%" [ngSwitch]="item.disponivel">
+                  <span *ngSwitchCase="true" class="glyphicon glyphicon-ok"></span>
+                  <span *ngSwitchCase="false" class="glyphicon glyphicon-unchecked"></span>
+              </td>
+              <td width="5%"><button class="btn btn-primary" (click)="showChildModal(item.aplicacaoId,empresa.id)">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
+<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">DV</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Confirma a exclusão da aplicação?</p>
+        <button class="btn btn-danger" type="button" (click)="excluirAplicacao()">Excluir</button>
+        <button class="btn btn-primary" type="button" (click)="hideChildModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

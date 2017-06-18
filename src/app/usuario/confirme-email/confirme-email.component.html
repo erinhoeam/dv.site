@@ -1,0 +1,7 @@
+<app-menu-superior></app-menu-superior>
+<div class="container main-container">
+  <h4>Confirmação E-mail</h4>
+  <hr />
+  <app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
+  <div *ngIf="success" class="alert alert-success" role="alert">E-mail confirmado com sucesso.</div>
+</div>
