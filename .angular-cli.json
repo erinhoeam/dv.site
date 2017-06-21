@@ -22,7 +22,8 @@
         "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
         "styles.css",
-        "./assets/font-awesome/css/font-awesome.min.css"
+        "./assets/font-awesome/css/font-awesome.min.css",
+        "styles/app.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

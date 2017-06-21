@@ -181,7 +181,7 @@ export class EmpresaFormComponent extends BaseComponent implements OnInit, After
     this.hideToastrInfo();
     this.errors = [];
     this.showToastrSuccess('Salvo com sucesso!','DV',null);
-    this.routerC.navigate(['/empresa-listar']);
+    this.routerC.navigate(['/empresa/listar']);
   }
   onSaveAplicacaoComplete(response: any) {
     this.hideToastrInfo();
@@ -192,7 +192,6 @@ export class EmpresaFormComponent extends BaseComponent implements OnInit, After
     this.hideToastrInfo();
     this.errors = [];
     this.empresa = response;
-    console.log(this.empresa);
      this.formulario.setValue({
        nome: this.empresa.nome,
        bloqueada: this.empresa.bloqueada

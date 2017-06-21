@@ -1,6 +1,6 @@
+import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -10,7 +10,6 @@ import {SelectModule} from 'ng2-select';
 import { MyDatePickerModule } from 'mydatepicker';
 
 import { MenuLoginComponent } from './menu-login/menu-login.component';
-import { FooterComponent } from './footer/footer.component';
 import { MenuSuperiorComponent } from './menu-superior/menu-superior.component';
 import { TemplateControlFormErrorComponent } from './templates/template-control-form-error/template-control-form-error.component';
 import { TemplateFormControlSummaryComponent } from './templates/template-form-control-summary/template-form-control-summary.component';
@@ -19,9 +18,9 @@ import { TemplateFormControlSummaryComponent } from './templates/template-form-c
 @NgModule({
   imports: [CommonModule,
            ReactiveFormsModule,
-           RouterModule,
-           CollapseModule,
            BsDropdownModule,
+           CollapseModule,
+           RouterModule,
            ModalModule,
            SelectModule,
            MyDatePickerModule],
@@ -31,16 +30,14 @@ import { TemplateFormControlSummaryComponent } from './templates/template-form-c
             MyDatePickerModule,
             ReactiveFormsModule,
             ModalModule,
-            FooterComponent, 
-            MenuSuperiorComponent,
             MenuLoginComponent,
+            MenuSuperiorComponent,
             TemplateControlFormErrorComponent,
             TemplateFormControlSummaryComponent],
 
-  declarations: [FooterComponent,
-                 MenuSuperiorComponent,
+  declarations: [TemplateControlFormErrorComponent, 
+                 TemplateFormControlSummaryComponent,
                  MenuLoginComponent,
-                 TemplateControlFormErrorComponent, 
-                 TemplateFormControlSummaryComponent]
+                 MenuSuperiorComponent]
 })
 export class SharedModule { }

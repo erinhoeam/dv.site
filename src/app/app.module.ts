@@ -14,22 +14,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 //Shared
-import { MainPrincipalComponent } from './shared/main-principal/main-principal.component';
 import { AuthService } from './shared/auth.service';
-
-//Module Components
-import { SharedModule } from './shared/shared.module';
-import { HomeModule } from './home/home.module';
-import { UsuarioModule } from './usuario/usuario.module';
-import { AplicacaoModule } from './aplicacao/aplicacao.module';
-import { EmpresaModule } from './empresa/empresa.module';
 
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    MainPrincipalComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -41,11 +32,6 @@ import {ToastModule} from 'ng2-toastr/ng2-toastr';
     BsDropdownModule.forRoot(),
     FormsModule,
     HttpModule,
-    SharedModule,
-    HomeModule,
-    UsuarioModule,
-    AplicacaoModule,
-    EmpresaModule,
     AppRoutingModule
   ],
   providers: [AuthService],

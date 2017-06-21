@@ -1,6 +1,6 @@
 <ul [ngSwitch]="usuarioLogado()" class="nav navbar-nav navbar-right">
-        <li *ngSwitchCase="true"><a [routerLink]="['/registro']">Registre-se</a></li>
-        <li *ngSwitchCase="false"><a [routerLink]="['/login']">Entrar</a></li>
+        <li *ngSwitchCase="true"><a [routerLink]="['/usuario/registrar']">Registre-se</a></li>
+        <li *ngSwitchCase="false"><a [routerLink]="['/login/entrar']">Entrar</a></li>
 
         <li *ngSwitchCase="true" class="dropdown" dropdown>
             <a href="#" dropdownToggle (click)="false" class="dropdown-toggle" 

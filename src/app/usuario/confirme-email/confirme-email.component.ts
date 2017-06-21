@@ -58,7 +58,7 @@ export class ConfirmeEmailComponent extends BaseComponent implements OnInit {
     this.success = true;
     this.hideToastrInfo();
     this.errors = [];
-    this.showToastrSuccess('E-mail confirmado com sucesso!','Bem Vindo!','/login');
+    this.showToastrSuccess('E-mail confirmado com sucesso!','Bem Vindo!','/login/entrar');
   }
 
   onSaveError(error: any) 

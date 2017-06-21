@@ -95,7 +95,6 @@ export class RegistroComponent extends BaseComponent implements OnInit, AfterVie
     if (this.formIsValid(this.formulario)){
 
       let p = Object.assign({}, this.usuario, this.formulario.value);  
-      console.log(p);
       this.showToastrInfo('Registrando...');
       this.usuarioService.registrarUsuario(p)
       .subscribe(
@@ -109,6 +108,7 @@ export class RegistroComponent extends BaseComponent implements OnInit, AfterVie
   onSaveComplete(response: any) {
     this.hideToastrInfo();
     this.errors = [];
+    this.formulario.reset();
     this.showToastrSuccess('Registro realizado com sucesso!','Bem Vindo!','/home');
   }
 

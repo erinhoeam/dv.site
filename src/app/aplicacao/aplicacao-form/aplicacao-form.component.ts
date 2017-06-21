@@ -128,7 +128,7 @@ export class AplicacaoFormComponent extends BaseComponent implements OnInit, Aft
   onSaveComplete(response: any) {
     this.hideToastrInfo();
     this.errors = [];
-    this.showToastrSuccess('Salvo com sucesso!','DV','/aplicacao-listar');
+    this.showToastrSuccess('Salvo com sucesso!','DV','/aplicacao/listar');
   }
 
   onSaveError(error: any) 

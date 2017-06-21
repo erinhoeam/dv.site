@@ -9,12 +9,13 @@ import { AplicacaoService } from './../services/aplicacao.service';
 
 import { EmpresaFormComponent } from './empresa-form/empresa-form.component';
 import { EmpresaListarComponent } from './empresa-listar/empresa-listar.component';
+import { EmpresaMainComponent } from './empresa-main/empresa-main.component';
 
 @NgModule({
   imports: [
     FormsModule,SharedModule, EmpresaRoutingModule
   ],
-  declarations: [EmpresaListarComponent, EmpresaFormComponent],
+  declarations: [EmpresaListarComponent, EmpresaFormComponent, EmpresaMainComponent],
   exports: [EmpresaListarComponent,EmpresaFormComponent],
   providers:[EmpresaService,AplicacaoService]
 })

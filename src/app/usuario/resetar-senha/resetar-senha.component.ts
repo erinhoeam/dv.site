@@ -98,11 +98,13 @@ export class ResetarSenhaComponent extends BaseComponent implements OnInit, Afte
   onSaveComplete(response: any) {
     this.hideToastrInfo();
     this.errors = [];
-    this.showToastrSuccess('Senha resetada com sucesso!','ConcurseiroAmigo','/login');
+    this.formulario.reset();
+    this.showToastrSuccess('Senha resetada com sucesso!','ConcurseiroAmigo','/login/entrar');
   }
 
   onSaveError(error: any) 
   {
+    this.formulario.reset();
     this.hideToastrInfo();
     this.showToastrError('Falha ao resetar a senha!',error);
   }
@@ -110,9 +112,6 @@ export class ResetarSenhaComponent extends BaseComponent implements OnInit, Afte
     if (this.formIsValid(this.formulario)){
           this.showToastrInfo('Resetando...');
           let p = Object.assign({}, this.resetarModel, this.formulario.value);  
-          console.log(p);
-          // p.Id = this.resetarModel.Id;
-          // p.Code = this.resetarModel.Code;
           this.usuarioService.resetarSenha(p)
           .subscribe(
               result => { this.onSaveComplete(result) },

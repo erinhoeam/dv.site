@@ -2,10 +2,10 @@ import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewContainerRef, ViewChildren, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, FormControlName } from '@angular/forms';
 
-import { Login } from './../../models/login';
-import { BaseComponent } from './../../shared/base.component';
-import { UsuarioService } from './../../services/usuario.service';
-import { GenericValidator } from './../../utils/generic-form-validator';
+import { Login } from './../models/login';
+import { BaseComponent } from './../shared/base.component';
+import { UsuarioService } from './../services/usuario.service';
+import { GenericValidator } from './../utils/generic-form-validator';
 
 import { CustomValidators, CustomFormsModule } from 'ng2-validation'
 import { ToastsManager,Toast } from 'ng2-toastr/ng2-toastr';
@@ -94,7 +94,7 @@ export class LoginComponent extends BaseComponent implements OnInit, AfterViewIn
     
     this.hideToastrInfo();
     this.errors = [];
-
+    this.formulario.reset();
     localStorage.setItem('dv.service.token', response.result.access_token);
     localStorage.setItem('dv.service.user', JSON.stringify(response.result.user));
 
@@ -104,7 +104,7 @@ export class LoginComponent extends BaseComponent implements OnInit, AfterViewIn
 
   onSaveError(error: any) 
   {
-    
+    this.formulario.reset();
     this.hideToastrInfo();
     this.showToastrError('Falha ao realizar login.',error);
   }
