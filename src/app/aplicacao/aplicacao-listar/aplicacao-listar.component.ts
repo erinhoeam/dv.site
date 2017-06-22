@@ -10,7 +10,7 @@ import { BaseComponent } from "./../../shared/base.component";
 @Component({
   selector: 'app-aplicacao-listar',
   templateUrl: './aplicacao-listar.component.html',
-  styleUrls: ['./aplicacao-listar.component.css']
+  styleUrls: ['./aplicacao-listar.component.scss']
 })
 export class AplicacaoListarComponent extends BaseComponent implements OnInit {
   

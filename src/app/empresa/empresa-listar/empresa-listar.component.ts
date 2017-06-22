@@ -10,7 +10,7 @@ import { Empresa } from 'app/models/empresa';
 @Component({
   selector: 'app-empresa-listar',
   templateUrl: './empresa-listar.component.html',
-  styleUrls: ['./empresa-listar.component.css']
+  styleUrls: ['./empresa-listar.component.scss']
 })
 export class EmpresaListarComponent extends BaseComponent implements OnInit {
   

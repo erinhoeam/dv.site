@@ -12,7 +12,7 @@ import { ToastsManager,Toast } from 'ng2-toastr/ng2-toastr';
 @Component({
   selector: 'app-confirme-email',
   templateUrl: './confirme-email.component.html',
-  styleUrls: ['./confirme-email.component.css']
+  styleUrls: ['./confirme-email.component.scss']
 })
 export class ConfirmeEmailComponent extends BaseComponent implements OnInit {
 

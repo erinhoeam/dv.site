@@ -30,7 +30,7 @@ import { SelectComponent, SelectItem } from "ng2-select";
 @Component({
   selector: 'app-empresa-form',
   templateUrl: './empresa-form.component.html',
-  styleUrls: ['./empresa-form.component.css']
+  styleUrls: ['./empresa-form.component.scss']
 })
 export class EmpresaFormComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];

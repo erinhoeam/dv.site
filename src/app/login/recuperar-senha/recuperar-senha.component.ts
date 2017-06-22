@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'app-recuperar-senha',
   templateUrl: './recuperar-senha.component.html',
-  styleUrls: ['./recuperar-senha.component.css']
+  styleUrls: ['./recuperar-senha.component.scss']
 })
 export class RecuperarSenhaComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];

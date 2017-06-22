@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'app-aplicacao-form',
   templateUrl: './aplicacao-form.component.html',
-  styleUrls: ['./aplicacao-form.component.css']
+  styleUrls: ['./aplicacao-form.component.scss']
 })
 export class AplicacaoFormComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];

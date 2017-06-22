@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 @Component({
   selector: 'app-template-control-form-error',
   templateUrl: './template-control-form-error.component.html',
-  styleUrls: ['./template-control-form-error.component.css']
+  styleUrls: ['./template-control-form-error.component.scss']
 })
 export class TemplateControlFormErrorComponent implements OnInit {
 

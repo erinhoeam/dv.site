@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: 'app-menu-login',
   templateUrl: './menu-login.component.html',
-  styleUrls: ['./menu-login.component.css']
+  styleUrls: ['./menu-login.component.scss']
 })
 export class MenuLoginComponent implements OnInit {
 

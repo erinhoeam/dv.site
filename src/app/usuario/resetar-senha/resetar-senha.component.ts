@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'app-resetar-senha',
   templateUrl: './resetar-senha.component.html',
-  styleUrls: ['./resetar-senha.component.css']
+  styleUrls: ['./resetar-senha.component.scss']
 })
 export class ResetarSenhaComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];

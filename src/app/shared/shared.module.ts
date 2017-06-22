@@ -13,12 +13,12 @@ import { MenuLoginComponent } from './menu-login/menu-login.component';
 import { MenuSuperiorComponent } from './menu-superior/menu-superior.component';
 import { TemplateControlFormErrorComponent } from './templates/template-control-form-error/template-control-form-error.component';
 import { TemplateFormControlSummaryComponent } from './templates/template-form-control-summary/template-form-control-summary.component';
-
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   imports: [CommonModule,
            ReactiveFormsModule,
-           BsDropdownModule,
+           BsDropdownModule.forRoot(),
            CollapseModule,
            RouterModule,
            ModalModule,
@@ -32,12 +32,16 @@ import { TemplateFormControlSummaryComponent } from './templates/template-form-c
             ModalModule,
             MenuLoginComponent,
             MenuSuperiorComponent,
+            SidebarComponent,
             TemplateControlFormErrorComponent,
             TemplateFormControlSummaryComponent],
 
   declarations: [TemplateControlFormErrorComponent, 
                  TemplateFormControlSummaryComponent,
-                 MenuLoginComponent,
-                 MenuSuperiorComponent]
+                MenuLoginComponent,
+                MenuSuperiorComponent,
+                SidebarComponent
+                 ],
+  providers:[]
 })
 export class SharedModule { }
