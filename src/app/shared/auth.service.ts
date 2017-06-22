@@ -16,7 +16,7 @@ export class AuthService implements CanActivate {
 
     canActivate(routeAc: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         if (!this.token) {
-            this.router.navigate(['/login']);
+            this.router.navigate(['/login/entrar']);
             return false;
         }
 
