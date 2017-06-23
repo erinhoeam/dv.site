@@ -11,9 +11,9 @@ import { MyDatePickerModule } from 'mydatepicker';
 
 import { MenuLoginComponent } from './menu-login/menu-login.component';
 import { MenuSuperiorComponent } from './menu-superior/menu-superior.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 import { TemplateControlFormErrorComponent } from './templates/template-control-form-error/template-control-form-error.component';
 import { TemplateFormControlSummaryComponent } from './templates/template-form-control-summary/template-form-control-summary.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   imports: [CommonModule,

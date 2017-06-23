@@ -41,7 +41,7 @@ public items:string[] = ['The first choice!',
   logout() {
     localStorage.removeItem('dv.service.token');
     localStorage.removeItem('dv.service.user');
-    this.router.navigate(['/home']);
+    this.router.navigate(['/login/entrar']);
   }
 
 }

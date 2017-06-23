@@ -9,6 +9,7 @@ export class TemplateControlFormErrorComponent implements OnInit {
 
   @Input() msgError: string;
   @Input() notInline:boolean = true;
+  @Input() formFeedBack:boolean = true;
 
   constructor() { }
 

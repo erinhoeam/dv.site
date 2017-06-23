@@ -1,23 +1,27 @@
 <app-menu-superior></app-menu-superior>
-<div class="container main-container">
-  <h4>Empresas</h4>
-  <hr />
-  <a class="btn btn-primary" [routerLink]="['/empresa/novo']" >Nova Empresa</a>
-  <br /><br />
-  <table class="table table-striped" *ngIf="empresas != null && empresas.length>0">
-    <tr>
-      <th>Aplicação</th>
-      <th>Editar</th>
-      <th>Excluir</th>
-    </tr>
-    <tbody>
-      <tr *ngFor='let item of empresas'>
-          <td width="90%">{{item.nome}}</td>
-          <td width="5%"><a [routerLink]="['/empresa/editar/' + item.id]" class="btn btn-primary">
-          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></td>
-          <td width="5%"><a [routerLink]="['/empresa/editar/' + item.id]" class="btn btn-primary">
-          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+<div class="row">
+  <div class="col-sm-3 col-md-2 sidebar">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <h1 class="page-header">{{title}}</h1>
+    <a class="btn btn-primary" [routerLink]="['/empresa/novo']" >Nova Empresa</a>
+    <br /><br />
+    <table class="table table-striped" *ngIf="empresas != null && empresas.length>0">
+      <tr>
+        <th>Aplicação</th>
+        <th>Editar</th>
+        <th>Excluir</th>
       </tr>
-    </tbody>
-  </table>
+      <tbody>
+        <tr *ngFor='let item of empresas'>
+            <td width="90%">{{item.nome}}</td>
+            <td width="5%"><a [routerLink]="['/empresa/editar/' + item.id]" class="btn btn-primary">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></td>
+            <td width="5%"><a [routerLink]="['/empresa/editar/' + item.id]" class="btn btn-primary">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

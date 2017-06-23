@@ -67,7 +67,6 @@ export class RecuperarSenhaComponent extends BaseComponent implements OnInit, Af
   ngOnDestroy(): void {
     //throw new Error('Method not implemented.');
   }
-
   recuperar(){
     
     if (this.formIsValid(this.formulario)){

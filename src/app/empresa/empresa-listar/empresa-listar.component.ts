@@ -21,6 +21,7 @@ export class EmpresaListarComponent extends BaseComponent implements OnInit {
               private routerC: Router,
               vcr: ViewContainerRef) {
       super(toastr,vcr,routerC);
+      this.title = "Empresas";
   }
 
   ngOnInit() {

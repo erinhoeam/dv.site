@@ -1,20 +1,27 @@
 import { Injectable } from "@angular/core";
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute, Router } from "@angular/router";
+import { RequestOptions, Headers, Http, Response } from "@angular/http";
+
+import { Observable } from 'rxjs/Observable';
+import { ServiceBase } from "app/services/service.base";
 
 @Injectable()
-export class AuthService implements CanActivate {
+export class AuthService extends ServiceBase implements CanActivate {
 
     public token: string;
     //public route;
     public user;
 
-    constructor(private router: Router, route: ActivatedRoute) {
-        //this.route = route;
+    constructor(private router: Router, route: ActivatedRoute, private http:Http) {
+        super();
         this.token = localStorage.getItem('dv.service.token');
         this.user = JSON.parse(localStorage.getItem('dv.service.user'));
     }
 
     canActivate(routeAc: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        this.token = localStorage.getItem('dv.service.token');
+        this.user = JSON.parse(localStorage.getItem('dv.service.user'));
+
         if (!this.token) {
             this.router.navigate(['/login/entrar']);
             return false;

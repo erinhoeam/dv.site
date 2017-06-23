@@ -1,7 +1,10 @@
 <app-menu-superior></app-menu-superior>
-<div class="container main-container">
-  <h4>{{title}}</h4>
-  <hr />
+<div class="row">
+  <div class="col-sm-3 col-md-2 sidebar">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <h1 class="page-header">{{title}}</h1>
     <form novalidate [formGroup]="formulario" (ngSubmit)="save();" >
       <div class="form-horizontal">
         
@@ -93,20 +96,21 @@
         </tbody>
       </table>
     </div>
-</div>
-<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title pull-left">DV</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Confirma a exclusão da aplicação?</p>
-        <button class="btn btn-danger" type="button" (click)="excluirAplicacao()">Excluir</button>
-        <button class="btn btn-primary" type="button" (click)="hideChildModal()">Cancelar</button>
+  </div>
+  <div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">DV</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Confirma a exclusão da aplicação?</p>
+          <button class="btn btn-danger" type="button" (click)="excluirAplicacao()">Excluir</button>
+          <button class="btn btn-primary" type="button" (click)="hideChildModal()">Cancelar</button>
+        </div>
       </div>
     </div>
   </div>

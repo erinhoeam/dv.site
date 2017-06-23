@@ -74,12 +74,11 @@ export abstract class BaseComponent {
         this.toastr.dismissToast(this.toastActual);
     }
     verifyUnauthorized(response:Response) : boolean {
-        console.log(response);
         if (response.status && response.status == 401)
         {
             localStorage.removeItem('dv.service.token');
             localStorage.removeItem('dv.service.user');
-            this.router.navigate(['/login']);
+            this.router.navigate(['/login/entrar']);
             return true;
         }
         return false;

@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewContainerRef, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewContainerRef, ViewChildren, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, FormControlName } from '@angular/forms';
 
 import { Login } from './../models/login';
@@ -7,6 +7,7 @@ import { BaseComponent } from './../shared/base.component';
 import { UsuarioService } from './../services/usuario.service';
 import { GenericValidator } from './../utils/generic-form-validator';
 
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomValidators, CustomFormsModule } from 'ng2-validation'
 import { ToastsManager,Toast } from 'ng2-toastr/ng2-toastr';
 
@@ -23,9 +24,11 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class LoginComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
+  @ViewChild('childModal') public childModal:ModalDirective;
 
   login:Login;
   formulario: FormGroup;
+  public token: string;
 
   constructor(private usuarioService:UsuarioService,
               public toastr: ToastsManager, 
@@ -34,6 +37,8 @@ export class LoginComponent extends BaseComponent implements OnInit, AfterViewIn
               private fb:FormBuilder) {
 
     super(toastr,vcr,routerC);
+
+    this.token = localStorage.getItem('dv.service.token');
 
     this.validationMessages = {
       email: {
@@ -60,7 +65,10 @@ export class LoginComponent extends BaseComponent implements OnInit, AfterViewIn
       CustomValidators.email]],
       senha: senha
     });
-
+    if (this.token) {
+       this.routerC.navigate(['/home']);
+      return;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -91,21 +99,28 @@ export class LoginComponent extends BaseComponent implements OnInit, AfterViewIn
   }
 
   onSaveComplete(response: any) {
-    
+    localStorage.setItem('dv.service.token', response.result.access_token);
+    localStorage.setItem('dv.service.user', JSON.stringify(response.result.user));
+    this.loading = false;
     this.hideToastrInfo();
     this.errors = [];
     this.formulario.reset();
-    localStorage.setItem('dv.service.token', response.result.access_token);
-    localStorage.setItem('dv.service.user', JSON.stringify(response.result.user));
-
+    //this.showToastrSuccess('DV','Login Efetuado com sucesso!','/home',1000);
     this.routerC.navigate(['/home']);
-    
   }
 
   onSaveError(error: any) 
   {
+    this.loading = false;
     this.formulario.reset();
     this.hideToastrInfo();
     this.showToastrError('Falha ao realizar login.',error);
+  }
+
+  public showChildModal():void {
+    this.childModal.show();
+  }
+  public hideChildModal(){
+    this.childModal.hide();
   }
 }
