@@ -1,11 +1,12 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewContainerRef, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewContainerRef, ViewChildren, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, FormControlName } from '@angular/forms';
 
 import { BaseComponent } from './../../shared/base.component';
-import { Usuario } from './../../models/usuario';
 import { UsuarioService } from './../../services/usuario.service';
 import { GenericValidator } from './../../utils/generic-form-validator';
+
+import { AlterarSenha } from './../../models/alterar-senha';
 
 import { CustomValidators, CustomFormsModule } from 'ng2-validation';
 import { ToastsManager,Toast } from 'ng2-toastr/ng2-toastr';
@@ -14,36 +15,30 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/merge';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-  selector: 'app-registro',
-  templateUrl: './registro.component.html',
-  styleUrls: ['./registro.component.scss']
+  selector: 'app-alterar-senha',
+  templateUrl: './alterar-senha.component.html',
+  styleUrls: ['./alterar-senha.component.scss']
 })
-export class RegistroComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AlterarSenhaComponent extends BaseComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
 
-  usuario: Usuario;
   formulario: FormGroup;
+  alterarSenhaModel:AlterarSenha;
 
   constructor(private usuarioService:UsuarioService,
               public toastr: ToastsManager, 
               vcr: ViewContainerRef,
               private routerC: Router,
               private fb:FormBuilder) {
-    
-    super(toastr,vcr,routerC);
-    
-    this.validationMessages = {
-      nome: {
-          required: 'Nome requerido.',
-          minlength: 'O Nome precisa ter no mínimo 2 caracteres.',
-          maxlength: 'O Nome precisa ter no máximo 150 caracteres.'
-      },
-      email: {
-          required: 'Informe o e-mail.',
-          email: 'Email invalido.'
+
+      super(toastr,vcr,routerC);
+      this.title = "Alterar Senha";
+      this.validationMessages = {
+      senhaAtual:{
+          required: 'Informe a senha atual.',
+          minlength: 'A senha atual deve possuir no mínimo 6 caracteres.'
       },
       senha:{
           required: 'Informe a senha.',
@@ -57,24 +52,19 @@ export class RegistroComponent extends BaseComponent implements OnInit, AfterVie
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
-    this.usuario = new Usuario();
-
+    this.alterarSenhaModel = new AlterarSenha();
   }
 
   ngOnInit() {
+    let senhaAtual = new FormControl('', [Validators.required, Validators.minLength(6)]);
     let senha = new FormControl('', [Validators.required, Validators.minLength(6)]);
     let senhaConfirmacao = new FormControl('', [Validators.required, Validators.minLength(6), CustomValidators.equalTo(senha)]);
 
     this.formulario = this.fb.group({
-      nome: ['', [Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(150)]],
-      email: ['', [Validators.required,
-      CustomValidators.email]],
+      senhaAtual: senhaAtual,
       senha: senha,
       confirmeSenha: senhaConfirmacao
     });
-
   }
 
   ngAfterViewInit(): void {
@@ -86,17 +76,15 @@ export class RegistroComponent extends BaseComponent implements OnInit, AfterVie
     });
   }
 
-  ngOnDestroy(): void {
-    //throw new Error('Method not implemented.');
-  }
-
   save(){
 
     if (this.formIsValid(this.formulario)){
 
-      let p = Object.assign({}, this.usuario, this.formulario.value);  
-      this.showToastrInfo('Registrando...');
-      this.usuarioService.registrarUsuario(p)
+      let p = Object.assign({}, this.alterarSenhaModel, this.formulario.value); 
+
+      this.showToastrInfo('Alterando...');
+
+      this.usuarioService.alterarSenha(p)
       .subscribe(
           result => { this.onSaveComplete(result) },
           error => { this.onSaveError(error) }
@@ -105,17 +93,18 @@ export class RegistroComponent extends BaseComponent implements OnInit, AfterVie
   }
 
   onSaveComplete(response: any) {
+    localStorage.removeItem('dv.service.token');
+    localStorage.removeItem('dv.service.user');
     this.hideToastrInfo();
     this.errors = [];
     this.formulario.reset();
-    this.showToastrSuccess('Registro realizado com sucesso!','Bem Vindo!','/home');
+    this.showToastrSuccess('Senha alterada com sucesso!','Bem Vindo!','/login/entrar');
   }
 
   onSaveError(error: any) 
   {
     if(this.verifyUnauthorized(error)) return;
     this.hideToastrInfo();
-    this.showToastrError('Falha ao realizar o cadastro!',error);
-    
+    this.showToastrError('Ocorreu um erro!',error);
   }
 }

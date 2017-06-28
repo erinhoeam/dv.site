@@ -16,12 +16,13 @@ import { UsuarioService } from './../services/usuario.service';
 //Directives
 import { EqualValidator } from './../directives/validate-equal.directive';
 import { UsuarioMainComponent } from './usuario-main/usuario-main.component';
+import { AlterarSenhaComponent } from './alterar-senha/alterar-senha.component';
 
 @NgModule({
     imports: [FormsModule,SharedModule,UsuarioRoutingModule],
     exports: [RegistroComponent,ConfirmeEmailComponent,ResetarSenhaComponent],
     declarations: [RegistroComponent,EqualValidator,ConfirmeEmailComponent, 
-    ResetarSenhaComponent, UsuarioMainComponent],
+    ResetarSenhaComponent, UsuarioMainComponent, AlterarSenhaComponent],
     providers: [UsuarioService],
 })
 export class UsuarioModule { }

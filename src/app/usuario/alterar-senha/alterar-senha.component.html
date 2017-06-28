@@ -7,23 +7,14 @@
     <h1 class="page-header">{{title}}</h1>
     <form novalidate [formGroup]="formulario" (ngSubmit)="save();" >
       <div class="form-horizontal">
-        
+
         <app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
 
-        <div class="form-group" [ngClass]="aplicarCssErro(displayMessage.nome)">
-          <label class="col-md-2 control-label" for="nome">Nome Completo</label>
+        <div class="form-group" [ngClass]="aplicarCssErro(displayMessage.senhaAtual)">
+          <label class="col-md-2 control-label" for="senhaAtual">Senha Atual</label>
           <div class="col-md-6">
-            <input class="form-control" id="nome" formControlName="nome" type="text" placeholder="Nome (requerido)" />
-            <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.nome" *ngIf="displayMessage.nome">
-            </app-template-control-form-error>
-          </div>
-        </div>
-
-        <div class="form-group" [ngClass]="aplicarCssErro(displayMessage.email)">
-          <label class="col-md-2 control-label" for="email">Email</label>
-          <div class="col-md-6">
-            <input class="form-control" id="email" formControlName="email" type="text" placeholder="Email (requerido)" />
-            <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.email" *ngIf="displayMessage.email">
+            <input class="form-control" id="senhaAtual" formControlName="senhaAtual" type="password" placeholder="Senha Atual (requerido)" />
+            <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.senhaAtual" *ngIf="displayMessage.senhaAtual">
             </app-template-control-form-error>
           </div>
         </div>

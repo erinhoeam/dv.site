@@ -8,6 +8,7 @@ import { Login } from './../models/login';
 import { ConfirmaEmail } from './../models/confirmar-email';
 import { RecuperarSenha } from './../models/recuperar-senha';
 import { ResetarSenha } from './../models/resetar-senha';
+import { AlterarSenha } from './../models/alterar-senha';
 
 @Injectable()
 export class UsuarioService extends ServiceBase {
@@ -19,10 +20,7 @@ export class UsuarioService extends ServiceBase {
   }
 
   registrarUsuario(usuario: Usuario) : Observable<Usuario>{
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        //headers.append('Access-Control-Allow-Origin','*');
-
-        let options = new RequestOptions({ headers: headers });
+        let options = this.obterAuthHeader();
 
         let response = this.http
             .post(`${this.UrlServiceV1}nova-conta`, usuario, options)
@@ -72,6 +70,17 @@ export class UsuarioService extends ServiceBase {
 
         let response = this.http
             .post(`${this.UrlServiceV1}resetar-senha`, resetarModel, options)
+            .map(super.extractData)
+            .catch(super.serviceError);
+
+        return response;
+  }
+
+  alterarSenha(alterarSenhaModel:AlterarSenha){
+        let options = this.obterAuthHeader();
+
+        let response = this.http
+            .post(`${this.UrlServiceV1}alterar-senha`, alterarSenhaModel, options)
             .map(super.extractData)
             .catch(super.serviceError);
 
