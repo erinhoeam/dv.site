@@ -48,6 +48,9 @@ export abstract class ServiceBase {
         return body || {};
     }
     protected obterAuthHeader(): RequestOptions {
+
+        this.Token = localStorage.getItem('dv.service.token');
+        
         let headers = new Headers({ 'Content-Type': 'application/json' });
         headers.append('Authorization', `Bearer ${this.Token}`);
         let options = new RequestOptions({ headers: headers });

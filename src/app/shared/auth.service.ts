@@ -21,7 +21,7 @@ export class AuthService extends ServiceBase implements CanActivate {
     canActivate(routeAc: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         this.token = localStorage.getItem('dv.service.token');
         this.user = JSON.parse(localStorage.getItem('dv.service.user'));
-
+        
         if (!this.token) {
             this.router.navigate(['/login/entrar']);
             return false;
