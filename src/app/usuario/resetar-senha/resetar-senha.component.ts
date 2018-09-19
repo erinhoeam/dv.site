@@ -10,10 +10,6 @@ import { GenericValidator } from './../../utils/generic-form-validator';
 import { CustomValidators, CustomFormsModule } from 'ng2-validation';
 import { ToastsManager,Toast } from 'ng2-toastr/ng2-toastr';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/observable/merge';
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -39,13 +35,13 @@ export class ResetarSenhaComponent extends BaseComponent implements OnInit, Afte
 
       this.validationMessages = {
         senha:{
-            required: 'Informe a senha.',
-            minlength: 'A senha deve possuir no mínimo 6 caracteres.'
+            required: this.message.messages.ALTERAR_SENHA.SENHA_NOVA_REQUIRED,
+            minlength: this.message.messages.ALTERAR_SENHA.SENHA_NOVA_MIN_LENGTH
         },
         confirmeSenha:{
-            required: 'Informe a senha novamente.',
-            minlength: 'A senha deve possuir no mínimo 6 caracteres.',
-            equalTo: 'As senhas não conferem.'
+            required: this.message.messages.ALTERAR_SENHA.SENHA_CONFIRME_REQUIRED,
+            minlength: this.message.messages.ALTERAR_SENHA.SENHA_CONFIRME_MIN_LENGTH,
+            equalTo: this.message.messages.ALTERAR_SENHA.SENHA_CONFIRME_EQUAL_TO
         }
       };
 
@@ -60,7 +56,6 @@ export class ResetarSenhaComponent extends BaseComponent implements OnInit, Afte
             this.resetarModel = new ResetarSenha();
 
             this.resetarModel.Id = params['id'];
-            this.resetarModel.Code = params['code'];
         } 
     );
 
@@ -68,54 +63,37 @@ export class ResetarSenhaComponent extends BaseComponent implements OnInit, Afte
     let senhaConfirmacao = new FormControl('', [Validators.required, Validators.minLength(6), CustomValidators.equalTo(senha)]);
 
     this.formulario = this.fb.group({
-      Id: '',
-      Code: '',
       senha: senha,
       confirmeSenha: senhaConfirmacao
     });
 
     this.formulario.setValue({
-      Id: this.resetarModel.Id,
-      Code: this.resetarModel.Code,
       senha:'',
       confirmeSenha:''
     });
   }
 
   ngAfterViewInit(): void {
-      let controlBlurs: Observable<any>[] = this.formInputElements
-        .map((formControl: ElementRef) => Observable.fromEvent(formControl.nativeElement, 'blur'));
-
-      Observable.merge(this.formulario.valueChanges, ...controlBlurs).debounceTime(10).subscribe(value => {
-        this.displayMessage = this.genericValidator.processMessages(this.formulario);
-      });
+      this.validateOnBlur(this.formInputElements,this.formulario);
   }
 
   ngOnDestroy(){
     this.inscricao.unsubscribe();
   }
 
-  onSaveComplete(response: any) {
-    this.hideToastrInfo();
-    this.errors = [];
-    this.formulario.reset();
-    this.showToastrSuccess('Senha resetada com sucesso!','ConcurseiroAmigo','/login/entrar');
-  }
-
-  onSaveError(error: any) 
-  {
-    this.formulario.reset();
-    this.hideToastrInfo();
-    this.showToastrError('Falha ao resetar a senha!',error);
-  }
   resetar(){
     if (this.formIsValid(this.formulario)){
-          this.showToastrInfo('Resetando...');
-          let p = Object.assign({}, this.resetarModel, this.formulario.value);  
-          this.usuarioService.resetarSenha(p)
+          this.showToastrInfo(this.message.messages.SHARED.MSG_SAVING);
+         
+          this.resetarModel.Senha = this.formulario.get("senha").value;
+          this.resetarModel.ConfirmeSenha = this.formulario.get("confirmeSenha").value;
+
+          this.usuarioService.resetarSenha(this.resetarModel)
           .subscribe(
-              result => { this.onSaveComplete(result) },
-              error => { this.onSaveError(error) }
+              result => { this.onCompleteSuccess(result,
+                this.message.messages.SHARED.MSG_SAVE_SUCCESS,
+                this.message.routes.LOGIN.ENTRAR) },
+              error => { this.onError(error) }
           );
     }
   }

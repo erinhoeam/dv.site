@@ -21,26 +21,24 @@ export class AplicacaoListarComponent extends BaseComponent implements OnInit {
               private routerC: Router,
               vcr: ViewContainerRef) { 
     super(toastr,vcr,routerC);
-    this.title = "Aplicações";
+    this.title = this.message.titles.APLICACAO.TITLE_LIST;
   }
 
   ngOnInit() {
-    this.showToastrInfo('Listando...');
+    this.listarAplicacoes();
+  }
+
+  listarAplicacoes(){
+    this.showToastrInfo(this.message.messages.SHARED.MSG_LISTING);
     this.aplicacaoService.listar()
       .subscribe(
         response => { this.onListarComplete(response) },
         error => { this.onError(error) });
   }
+
   onListarComplete(entities: Aplicacao[]) {
     this.aplicacoes = entities;
     this.hideToastrInfo();
     this.errors = [];
   }
-  onError(error: any) 
-  {
-    if(this.verifyUnauthorized(error)) return;
-    this.hideToastrInfo();
-    this.showToastrError('Falha ao realizar a operação!',error);
-  }
-
 }

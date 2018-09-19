@@ -7,7 +7,7 @@ import { EmpresaMainComponent } from './empresa-main/empresa-main.component';
 import { EmpresaListarComponent } from './empresa-listar/empresa-listar.component';
 import { EmpresaFormComponent } from './empresa-form/empresa-form.component';
 
-const aplicacaoRoutes: Routes = [
+const empresaRoutes: Routes = [
     { path: '', canActivate: [AuthService], component: EmpresaMainComponent, 
     children: [
     { path: 'listar', canActivate: [AuthService], component: EmpresaListarComponent },
@@ -16,7 +16,7 @@ const aplicacaoRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(aplicacaoRoutes)],
+  imports: [RouterModule.forChild(empresaRoutes)],
   exports: [RouterModule]
 })
 export class EmpresaRoutingModule { }

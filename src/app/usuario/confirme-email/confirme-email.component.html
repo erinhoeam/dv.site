@@ -1,6 +1,25 @@
-<div class="container main-container">
-  <h4>Confirmação E-mail</h4>
-  <hr />
-  <app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
-  <div *ngIf="success" class="alert alert-success" role="alert">E-mail confirmado com sucesso.</div>
+<div class="container" style="width: 700px;">
+  <div class="jumbotron">
+      <app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
+      <div *ngIf="success" class="alert alert-success" role="alert">E-mail confirmado com sucesso.</div>    
+      <h3>Cadastro Professores</h3>
+      <hr />
+      <h4>Informe uma nova senha e clique no botão Confirmar.</h4>
+			<form role="form" (ngSubmit)="confirmar()" novalidate [formGroup]="formulario">
+          <div class="form-content">
+            <div class="form-group">
+              <input [ngClass]="aplicarCssErro(displayMessage.senha)" class="form-control" id="senha" formControlName="senha" type="password" placeholder="Senha (requerido)" />
+              <app-template-control-form-error [formFeedBack]="false" [notInline]="false" [msgError]="displayMessage.senha" *ngIf="displayMessage.senha">
+              </app-template-control-form-error>
+            </div>
+            <div class="form-group">
+              <input [ngClass]="aplicarCssErro(displayMessage.confirmeSenha)" class="form-control" id="confirmeSenha" formControlName="confirmeSenha" type="password" placeholder="Confirme a Senha" />
+              <app-template-control-form-error [formFeedBack]="false" [notInline]="false" [msgError]="displayMessage.confirmeSenha" *ngIf="displayMessage.confirmeSenha">
+              </app-template-control-form-error>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit" [disabled]="loading"> Confirmar </button>
+        </form>
+    </div>
 </div>
+

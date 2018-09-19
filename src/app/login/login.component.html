@@ -1,38 +1,65 @@
-<div class="login-page animate">
-	<div class="row">
-		<div class="col-lg-4 col-lg-offset-4">
-			<h1>DV - Site</h1>
-      <app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
-			<form role="form" (ngSubmit)="loginUsuario()" novalidate [formGroup]="formulario">
-				<div class="form-content">
+<div class="container">
+    <div class="omb_login">
+    	
+		<h3 class="omb_authTitle">DV - Site</h3>
+
+		<div class="row omb_row-sm-offset-3">
+			<div class="col-xs-12 col-sm-6">	
+				<app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
+			    <form role="form" (ngSubmit)="loginUsuario()" novalidate [formGroup]="formulario">
 					<div class="form-group">
-            <input autocomplete="off" class="form-control input-underline input-lg" id="email" formControlName="email" type="text" placeholder="Email (requerido)" />
-            <app-template-control-form-error [formFeedBack]="false" [notInline]="false" [msgError]="displayMessage.email" *ngIf="displayMessage.email">
-            </app-template-control-form-error>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fa fa-user"></i></span>
+							</div>
+							<input [ngClass]="aplicarCssErro(displayMessage.email)" class="form-control input-underline input-lg" id="email" formControlName="email" type="text" placeholder="Email (requerido)" />
+						</div>
+						<app-template-control-form-error [formFeedBack]="false" [notInline]="false" [msgError]="displayMessage.email" *ngIf="displayMessage.email">
+						</app-template-control-form-error>
+						<span class="help-block"></span>
 					</div>
 					<div class="form-group">
-            <input class="form-control input-underline input-lg" id="senha" formControlName="senha" type="password" placeholder="Senha (requerido)" />
-            <app-template-control-form-error [formFeedBack]="false" [notInline]="false" [msgError]="displayMessage.senha" *ngIf="displayMessage.senha">
-            </app-template-control-form-error>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fa fa-lock"></i></span>
+							</div>
+							<input [ngClass]="aplicarCssErro(displayMessage.senha)" class="form-control input-underline input-lg" id="senha" formControlName="senha" type="password" placeholder="Senha (requerido)" />
+						</div>
+						<app-template-control-form-error [formFeedBack]="false" [notInline]="false" [msgError]="displayMessage.senha" *ngIf="displayMessage.senha">
+						</app-template-control-form-error>
+						<span class="help-block"></span>
 					</div>
-				</div>
-				<button class="btn rounded-btn" type="submit" [disabled]="!formulario.valid || loading"> Entrar </button>&nbsp;&nbsp;
-        <button class="btn rounded-btn" type="button" (click)="showChildModal()"> Esqueci </button>
-			</form>
-		</div>	
-	</div>
-</div>
-<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-md">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title pull-left">Recuperar Senha</h4>
-				<button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
-					<span aria-hidden="true">&times;</span>
-				</button>
+					<div class="form-group">
+						<button class="btn btn-lg btn-primary btn-block" [disabled]="loading" type="submit">Entrar</button>
+					</div>
+				</form>
 			</div>
-			<div class="modal-body">
-				<app-recuperar-senha></app-recuperar-senha>
+    	</div>
+		<div class="row omb_row-sm-offset-3">
+			<div class="col-xs-12 col-sm-3">
+				<!-- <label class="checkbox">
+					<input type="checkbox" value="remember-me">Lembrar
+				</label> -->
+			</div>
+			<div class="col-xs-12 col-sm-3">
+				<p class="omb_forgotPwd">
+					<a href="javascript:void(0)" (click)="showChildModal()">Esqueci a senha</a>
+				</p>
+			</div>
+		</div>	    	
+	</div>
+	<div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title pull-left">Recuperar Senha</h4>
+					<button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<app-recuperar-senha></app-recuperar-senha>
+				</div>
 			</div>
 		</div>
 	</div>

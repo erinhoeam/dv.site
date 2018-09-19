@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -18,6 +18,12 @@ import { AuthService } from './shared/auth.service';
 
 import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
+import { registerLocaleData } from '@angular/common';
+import ptBr from '@angular/common/locales/pt';
+import { ScrollToModule } from 'ng2-scroll-to-el';
+
+registerLocaleData(ptBr)
+
 @NgModule({
   declarations: [
     AppComponent
@@ -30,9 +36,10 @@ import {ToastModule} from 'ng2-toastr/ng2-toastr';
     CollapseModule.forRoot(),
     CarouselModule.forRoot(),
     BsDropdownModule.forRoot(),
+    ScrollToModule.forRoot(),
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

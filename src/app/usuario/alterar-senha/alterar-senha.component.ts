@@ -11,11 +11,6 @@ import { AlterarSenha } from './../../models/alterar-senha';
 import { CustomValidators, CustomFormsModule } from 'ng2-validation';
 import { ToastsManager,Toast } from 'ng2-toastr/ng2-toastr';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/observable/merge';
-import { Observable } from 'rxjs/Observable';
-
 @Component({
   selector: 'app-alterar-senha',
   templateUrl: './alterar-senha.component.html',
@@ -34,21 +29,23 @@ export class AlterarSenhaComponent extends BaseComponent implements OnInit, Afte
               private fb:FormBuilder) {
 
       super(toastr,vcr,routerC);
-      this.title = "Alterar Senha";
+
+      this.title = this.message.titles.ALTERAR_SENHA.TITLE;
+      
       this.validationMessages = {
-      senhaAtual:{
-          required: 'Informe a senha atual.',
-          minlength: 'A senha atual deve possuir no mínimo 6 caracteres.'
-      },
-      senha:{
-          required: 'Informe a senha.',
-          minlength: 'A senha deve possuir no mínimo 6 caracteres.'
-      },
-      confirmeSenha:{
-          required: 'Informe a senha novamente.',
-          minlength: 'A senha deve possuir no mínimo 6 caracteres.',
-          equalTo: 'As senhas não conferem.'
-      }
+        senhaAtual:{
+            required: this.message.messages.ALTERAR_SENHA.SENHA_ATUAL_REQUIRED,
+            minlength: this.message.messages.ALTERAR_SENHA.SENHA_ATUAL_REQUIRED
+        },
+        senha:{
+            required: this.message.messages.ALTERAR_SENHA.SENHA_NOVA_REQUIRED,
+            minlength: this.message.messages.ALTERAR_SENHA.SENHA_NOVA_MIN_LENGTH
+        },
+        confirmeSenha:{
+            required: this.message.messages.ALTERAR_SENHA.SENHA_CONFIRME_REQUIRED,
+            minlength: this.message.messages.ALTERAR_SENHA.SENHA_CONFIRME_MIN_LENGTH,
+            equalTo: this.message.messages.ALTERAR_SENHA.SENHA_CONFIRME_EQUAL_TO
+        }
     };
 
     this.genericValidator = new GenericValidator(this.validationMessages);
@@ -68,12 +65,7 @@ export class AlterarSenhaComponent extends BaseComponent implements OnInit, Afte
   }
 
   ngAfterViewInit(): void {
-    let controlBlurs: Observable<any>[] = this.formInputElements
-      .map((formControl: ElementRef) => Observable.fromEvent(formControl.nativeElement, 'blur'));
-
-    Observable.merge(this.formulario.valueChanges, ...controlBlurs).debounceTime(10).subscribe(value => {
-      this.displayMessage = this.genericValidator.processMessages(this.formulario);
-    });
+    this.validateOnBlur(this.formInputElements,this.formulario);
   }
 
   save(){
@@ -82,13 +74,17 @@ export class AlterarSenhaComponent extends BaseComponent implements OnInit, Afte
 
       let p = Object.assign({}, this.alterarSenhaModel, this.formulario.value); 
 
-      this.showToastrInfo('Alterando...');
+      this.showToastrInfo(this.message.messages.SHARED.MSG_SAVING);
 
       this.usuarioService.alterarSenha(p)
       .subscribe(
           result => { this.onSaveComplete(result) },
-          error => { this.onSaveError(error) }
+          error => { this.onError(error) }
       );
+    }
+    else{
+      this.verificaValidacoesForm(this.formulario);
+      this.displayMessage = this.genericValidator.processMessages(this.formulario);
     }
   }
 
@@ -98,13 +94,6 @@ export class AlterarSenhaComponent extends BaseComponent implements OnInit, Afte
     this.hideToastrInfo();
     this.errors = [];
     this.formulario.reset();
-    this.showToastrSuccess('Senha alterada com sucesso!','Bem Vindo!','/login/entrar');
-  }
-
-  onSaveError(error: any) 
-  {
-    if(this.verifyUnauthorized(error)) return;
-    this.hideToastrInfo();
-    this.showToastrError('Ocorreu um erro!',error);
+    this.showToastrSuccess(this.message.messages.SHARED.MSG_SAVE_SUCCESS,'CondomínioMais',this.message.routes.LOGIN.ENTRAR);
   }
 }

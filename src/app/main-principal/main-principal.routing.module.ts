@@ -11,7 +11,7 @@ const ROUTES: Routes = [
             { path: 'empresa', loadChildren: './../empresa/empresa.module#EmpresaModule' },
             { path: 'home', loadChildren: './../home/home.module#HomeModule' },
             { path: 'usuario', loadChildren: './../usuario/usuario.module#UsuarioModule' },
-            { path: 'login', loadChildren: './../login/login.module#LoginModule' }
+            { path: 'login', loadChildren: './../login/login.module#LoginModule' },
         ]
     }
 ];

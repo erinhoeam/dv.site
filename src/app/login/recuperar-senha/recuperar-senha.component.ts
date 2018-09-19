@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewContainerRef, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewContainerRef, ViewChildren, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, FormControlName } from '@angular/forms';
 
 import { BaseComponent } from './../../shared/base.component';
@@ -10,10 +10,6 @@ import { GenericValidator } from './../../utils/generic-form-validator';
 import { CustomValidators, CustomFormsModule } from 'ng2-validation';
 import { ToastsManager,Toast } from 'ng2-toastr/ng2-toastr';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/observable/merge';
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -21,12 +17,12 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './recuperar-senha.component.html',
   styleUrls: ['./recuperar-senha.component.scss']
 })
-export class RecuperarSenhaComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class RecuperarSenhaComponent extends BaseComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
 
   recuperarSenha:RecuperarSenha;
-  success:boolean = false;
   formulario:FormGroup;
+  success:boolean = false;
 
   constructor(private usuarioService:UsuarioService,
               public toastr: ToastsManager, 
@@ -34,63 +30,50 @@ export class RecuperarSenhaComponent extends BaseComponent implements OnInit, Af
               private routerC: Router,
               private fb:FormBuilder) { 
 
-            super(toastr,vcr,routerC);
+    super(toastr,vcr,routerC);
 
-            this.validationMessages = {
-              email: {
-                  required: 'Informe o e-mail.',
-                  email: 'Email invalido.'
-              }
-            };
+    this.validationMessages = {
+      emailRecuperar: {
+          required: this.message.messages.RECUPERAR_SENHA.EMAIL_REQUIRED,
+          email: this.message.messages.RECUPERAR_SENHA.EMAIL_INVALID
+      }
+    };
 
-            this.genericValidator = new GenericValidator(this.validationMessages);
-            this.recuperarSenha = new RecuperarSenha();
+    this.genericValidator = new GenericValidator(this.validationMessages);
+    this.recuperarSenha = new RecuperarSenha();
   }
 
   ngOnInit() {
     this.formulario = this.fb.group({
-      email: ['', [Validators.required,
+      emailRecuperar: ['', [Validators.required,
       CustomValidators.email]]
     });
 
   }
 
   ngAfterViewInit(): void {
-      let controlBlurs: Observable<any>[] = this.formInputElements
-        .map((formControl: ElementRef) => Observable.fromEvent(formControl.nativeElement, 'blur'));
-
-      Observable.merge(this.formulario.valueChanges, ...controlBlurs).debounceTime(10).subscribe(value => {
-        this.displayMessage = this.genericValidator.processMessages(this.formulario);
-      });
+    this.validateOnBlur(this.formInputElements,this.formulario);
   }
 
-  ngOnDestroy(): void {
-    //throw new Error('Method not implemented.');
-  }
   recuperar(){
     
     if (this.formIsValid(this.formulario)){
-      let p = Object.assign({}, this.recuperarSenha, this.formulario.value);  
+      this.recuperarSenha = new RecuperarSenha();
+      this.recuperarSenha.Email = this.formulario.get("emailRecuperar").value;  
       
-      this.showToastrInfo('Enviando...');
-      this.usuarioService.recuperarSenha(p)
+      this.showToastrInfo(this.message.messages.SHARED.MSG_SENDING);
+      this.usuarioService.recuperarSenha(this.recuperarSenha)
       .subscribe(
-          result => { this.onSaveComplete(result) },
-          error => { this.onSaveError(error) }
+          result => { this.onSendingComplete(result) },
+          error => { this.onError(error) }
       );
     }
   }
-  onSaveComplete(response: any) {
+
+  onSendingComplete(response: any) {
     this.success = true;
     this.hideToastrInfo();
     this.errors = [];
     this.recuperarSenha = new RecuperarSenha();
-  }
-
-  onSaveError(error: any) 
-  {
-    this.success = false;
-    this.hideToastrInfo();
-    this.showToastrError('Falha ao enviar E-mail de recuperação.',error);
   }
 }

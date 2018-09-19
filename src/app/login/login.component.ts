@@ -1,28 +1,25 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewContainerRef, ViewChildren, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewContainerRef, ViewChildren, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, FormControlName } from '@angular/forms';
 
-import { Login } from './../models/login';
+import { FacebookService, InitParams, LoginResponse, LoginOptions } from 'ngx-facebook';
+
 import { BaseComponent } from './../shared/base.component';
 import { UsuarioService } from './../services/usuario.service';
 import { GenericValidator } from './../utils/generic-form-validator';
 
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CustomValidators, CustomFormsModule } from 'ng2-validation'
-import { ToastsManager,Toast } from 'ng2-toastr/ng2-toastr';
+import { Login } from './../models/login';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/observable/merge';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { CustomValidators, CustomFormsModule } from 'ng2-validation';
+import { ToastsManager,Toast } from 'ng2-toastr/ng2-toastr';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class LoginComponent extends BaseComponent implements OnInit, AfterViewInit {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   @ViewChild('childModal') public childModal:ModalDirective;
 
@@ -31,23 +28,24 @@ export class LoginComponent extends BaseComponent implements OnInit, AfterViewIn
   public token: string;
 
   constructor(private usuarioService:UsuarioService,
+              private facebookService: FacebookService,
               public toastr: ToastsManager, 
               vcr: ViewContainerRef,
               private routerC: Router,
               private fb:FormBuilder) {
 
     super(toastr,vcr,routerC);
-
+    
     this.token = localStorage.getItem('dv.service.token');
 
     this.validationMessages = {
       email: {
-          required: 'Informe o e-mail.',
-          email: 'Email invalido.'
+          required: this.message.messages.USUARIO.EMAIL_REQUIRED,
+          email: this.message.messages.USUARIO.EMAIL_INVALID
       },
       senha:{
-          required: 'Informe a senha.',
-          minlength: 'A senha deve possuir no mínimo 6 caracteres.'
+          required: this.message.messages.ALTERAR_SENHA.SENHA_NOVA_REQUIRED,
+          minlength: this.message.messages.ALTERAR_SENHA.SENHA_NOVA_MIN_LENGTH
       }
     };
 
@@ -58,63 +56,58 @@ export class LoginComponent extends BaseComponent implements OnInit, AfterViewIn
   }
 
   ngOnInit() {
-    let senha = new FormControl('', [Validators.required, Validators.minLength(6)]);
 
     this.formulario = this.fb.group({
       email: ['', [Validators.required,
       CustomValidators.email]],
-      senha: senha
+      senha: ['', [Validators.required,Validators.minLength(6)]]
     });
+
     if (this.token) {
-       this.routerC.navigate(['/home']);
+       this.routerC.navigate(['/home/inicial']);
       return;
     }
   }
 
   ngAfterViewInit(): void {
-      let controlBlurs: Observable<any>[] = this.formInputElements
-        .map((formControl: ElementRef) => Observable.fromEvent(formControl.nativeElement, 'blur'));
-
-      Observable.merge(this.formulario.valueChanges, ...controlBlurs).debounceTime(10).subscribe(value => {
-        this.displayMessage = this.genericValidator.processMessages(this.formulario);
-      });
-  }
-
-  ngOnDestroy(): void {
-      //throw new Error('Method not implemented.');
+      this.validateOnBlur(this.formInputElements,this.formulario);
   }
 
   loginUsuario(){
     
     if (this.formIsValid(this.formulario)){
 
-      this.showToastrInfo('Efetuando Login...');
+      this.showToastrInfo(this.message.messages.SHARED.LOGIN);
+
       let p = Object.assign({}, this.login, this.formulario.value);  
       this.usuarioService.loginUsuario(p)
       .subscribe(
-          result => { this.onSaveComplete(result) },
-          error => { this.onSaveError(error) }
+          result => { this.onLoginComplete(result) },
+          error => { this.onLoginError(error) }
       );
+    }
+    else
+    {
+      this.verificaValidacoesForm(this.formulario);
+      this.displayMessage = this.genericValidator.processMessages(this.formulario);
     }
   }
 
-  onSaveComplete(response: any) {
+  onLoginComplete(response: any) {
     localStorage.setItem('dv.service.token', response.result.access_token);
     localStorage.setItem('dv.service.user', JSON.stringify(response.result.user));
+    this.formulario.reset();
     this.loading = false;
     this.hideToastrInfo();
     this.errors = [];
-    this.formulario.reset();
-    //this.showToastrSuccess('DV','Login Efetuado com sucesso!','/home',1000);
-    this.routerC.navigate(['/home']);
+    
+    this.routerC.navigate(['/home/inicial']);
   }
 
-  onSaveError(error: any) 
+  onLoginError(error: any) 
   {
-    this.loading = false;
     this.formulario.reset();
-    this.hideToastrInfo();
-    this.showToastrError('Falha ao realizar login.',error);
+    super.onError(error);
   }
 
   public showChildModal():void {

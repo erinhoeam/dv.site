@@ -1,9 +1,9 @@
 export class ConfirmaEmail{
-    Id:string
-    Code:string
+    id:string;
+    senha:String;
+    confirmeSenha:String;
 
-    constructor(id:string,code:string){
-        this.Id = id;
-        this.Code = code;
+    constructor(id:string){
+        this.id = id;
     }
 }

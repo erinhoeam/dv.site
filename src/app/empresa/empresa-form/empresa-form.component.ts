@@ -34,7 +34,6 @@ import { SelectComponent, SelectItem } from "ng2-select";
 })
 export class EmpresaFormComponent extends BaseComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
-  @ViewChild('SelectAplicacao') selectAplicacao: SelectComponent
   @ViewChild('childModal') public childModal:ModalDirective;
 
   private myDatePickerOptions = DateUtils.getMyDatePickerOptions();
@@ -60,9 +59,9 @@ export class EmpresaFormComponent extends BaseComponent implements OnInit, After
 
             this.validationMessages = {
               nome: {
-                  required: 'Nome requerido.',
-                  minlength: 'O Nome precisa ter no mínimo 2 caracteres.',
-                  maxlength: 'O Nome precisa ter no máximo 150 caracteres.'
+                required: this.message.messages.EMPRESA.NOME_REQUIRED,
+                minlength: this.message.messages.EMPRESA.NOME_MIN_LENGTH,
+                maxlength: this.message.messages.EMPRESA.NOME_MAX_LENGTH
               }
             };
 
@@ -79,41 +78,43 @@ export class EmpresaFormComponent extends BaseComponent implements OnInit, After
           Validators.maxLength(150)]],
           bloqueada:''
         });
+
     this.formularioAplicacao = this.fb.group({
           aplicacaoId:'',
           dataValidade:'',
           disponivel:''
         });
-        this.inscricao = this.routeActivated.params.subscribe(
+
+    this.inscricao = this.routeActivated.params.subscribe(
         (params:any) => {
             
             if(params['id']){
-              this.title = "Atualizar Empresa";
+
+              this.title = this.message.titles.EMPRESA.TITLE_UPDATE;
+              this.icon = this.message.titles.ICON.EDIT;
 
               this.empresa.id = params['id'];
               
-              this.showToastrInfo('Carregando...');
+              this.showToastrInfo(this.message.messages.SHARED.MSG_LOADING);
 
               this.empresaService.obter(this.empresa.id)
               .subscribe(
                   result => { this.onObterComplete(result) },
-                  error => { this.onSaveError(error) }
+                  error => { this.onError(error) }
               );
+
               this.aplicacaoService.listar()
               .subscribe(
               apiAplicacao => {
                 this.aplicacoes = apiAplicacao;
-                this.aplicacoes.forEach(item => {
-                  item.id = item.id.toString();
-                  this.selectAplicacao.itemObjects.push(new SelectItem({ id: item.id, text: item.nome }))
-                });
               },
               error => this.errors
               );
 
             }
             else{
-              this.title = "Nova Empresa";
+              this.title = this.message.titles.EMPRESA.TITLE_NEW;
+              this.icon = this.message.titles.ICON.NEW;
             }
         }
     );
@@ -137,30 +138,40 @@ export class EmpresaFormComponent extends BaseComponent implements OnInit, After
       let p = Object.assign({}, this.empresa, this.formulario.value);
       p.id = this.empresa.id;
       p.bloqueada = p.bloqueada == "" ? false : true;
-      this.showToastrInfo('Salvando...');
+      
+      this.showToastrInfo(this.message.messages.SHARED.MSG_SAVING);
+
       if (this.empresa.id){
           this.empresaService.atualizar(p)
           .subscribe(
-          result => { this.onSaveComplete(result) },
-          error => { this.onSaveError(error) });
+          result => { this.onCompleteSuccess(result, 
+            this.message.messages.SHARED.MSG_SAVE_SUCCESS ,
+            this.message.routes.APLICACAO.LISTAR) },
+          error => { this.onError(error) });
       }
       else
       {
           this.empresaService.novo(p)
           .subscribe(
-          result => { this.onSaveComplete(result) },
-          error => { this.onSaveError(error) });
+          result => { this.onCompleteSuccess(result, 
+            this.message.messages.SHARED.MSG_SAVE_SUCCESS ,
+            null) },
+          error => { this.onError(error) });
       }
 
     }
   }
   adicionarAplicacao(){
-    this.showToastrInfo('Incluindo...');
+    
+    this.showToastrInfo(this.message.messages.SHARED.MSG_SAVING);
+
     this.empresaAplicacao = new EmpresaAplicacao();
     
     let p = Object.assign({}, this.empresaAplicacao, this.formularioAplicacao.value);
-    p.aplicacao.nome = p.aplicacaoId[0].text;
-    p.aplicacaoId = p.aplicacaoId[0].id;
+
+    let aplicacao = this.aplicacoes.find(n => n.id == p.aplicacaoId);
+
+    p.aplicacao.nome = aplicacao.nome;
     p.empresaId = this.empresa.id;
     p.dataValidade = DateUtils.getMyDatePickerDate(p.dataValidade);
     p.disponivel = p.disponivel == "" || p.disponivel == null ? false : p.disponivel;
@@ -168,21 +179,10 @@ export class EmpresaFormComponent extends BaseComponent implements OnInit, After
     this.empresaService.incluirAplicacaoEmpresa(p)
           .subscribe(
           result => { this.onSaveAplicacaoComplete(result); this.empresa.empresaAplicacoes.push(p); },
-          error => { this.onSaveError(error) });
+          error => { this.onError(error) });
           
   }
-  onSaveError(error: any) 
-  {
-    if(this.verifyUnauthorized(error)) return;
-    this.hideToastrInfo();
-    this.showToastrError('Falha ao realizar o cadastro!',error);
-  }
-  onSaveComplete(response: any) {
-    this.hideToastrInfo();
-    this.errors = [];
-    this.showToastrSuccess('Salvo com sucesso!','DV',null);
-    this.routerC.navigate(['/empresa/listar']);
-  }
+  
   onSaveAplicacaoComplete(response: any) {
     this.hideToastrInfo();
     this.errors = [];
@@ -197,9 +197,7 @@ export class EmpresaFormComponent extends BaseComponent implements OnInit, After
        bloqueada: this.empresa.bloqueada
      });
   }
-  public selected(value:any):void {
-    this.empresaAplicacao.aplicacaoId = value;
-  }
+  
   public showChildModal(aplicacaoId:String,empresaId:String):void {
     this.excluirAplicacaoEmpresa = new ExcluirAplicacaoEmpresa(aplicacaoId,empresaId);
 
@@ -213,7 +211,7 @@ export class EmpresaFormComponent extends BaseComponent implements OnInit, After
     this.empresaService.excluirAplicacaoEmpresa(this.excluirAplicacaoEmpresa)
           .subscribe(
           result => { this.onExcluirAplicacaoComplete(result); },
-          error => { this.onSaveError(error) });
+          error => { this.onError(error) });
   }
   onExcluirAplicacaoComplete(response: any) {
     this.hideToastrInfo();

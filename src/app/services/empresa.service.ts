@@ -7,6 +7,7 @@ import { ServiceBase } from "app/services/service.base";
 import { Empresa } from 'app/models/empresa';
 import { EmpresaAplicacao } from './../models/empresaAplicacao';
 import { ExcluirAplicacaoEmpresa } from './../models/excluir-Aplicacao-Empresa';
+import { RetornoServico } from '../models/retorno-servico';
 
 @Injectable()
 export class EmpresaService extends ServiceBase {

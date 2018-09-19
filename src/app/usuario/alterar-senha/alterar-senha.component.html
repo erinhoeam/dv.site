@@ -1,49 +1,59 @@
-<app-menu-superior></app-menu-superior>
-<div class="row">
-  <div class="col-sm-3 col-md-2 sidebar">
-    <app-sidebar></app-sidebar>
+<div class="container-fluid">
+  <div class="row" #target>
+    <div class="col">
+      <app-menu-superior></app-menu-superior>      
+    </div>
   </div>
-  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h1 class="page-header">{{title}}</h1>
-    <form novalidate [formGroup]="formulario" (ngSubmit)="save();" >
-      <div class="form-horizontal">
-
-        <app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
-
-        <div class="form-group" [ngClass]="aplicarCssErro(displayMessage.senhaAtual)">
-          <label class="col-md-2 control-label" for="senhaAtual">Senha Atual</label>
-          <div class="col-md-6">
-            <input class="form-control" id="senhaAtual" formControlName="senhaAtual" type="password" placeholder="Senha Atual (requerido)" />
-            <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.senhaAtual" *ngIf="displayMessage.senhaAtual">
-            </app-template-control-form-error>
-          </div>
+  <div class="row">
+    <div class="col-xs-2 col-md-2 col-lg-2 col-xl-2">
+        <app-sidebar></app-sidebar>
+    </div>
+    <div class="col-xs-10 col-md-10 col-lg-10 col-xl-10 main">
+      <div class="card bg-light mb-3">
+        <div class="card-header">
+            <i class="fa fa-key"></i> <span class="bold">{{title}}</span>
         </div>
+        <div class="card-body">
+          <form novalidate [formGroup]="formulario" (ngSubmit)="save();" >
+            <div class="form-horizontal">
 
-        <div class="form-group" [ngClass]="aplicarCssErro(displayMessage.senha)">
-          <label class="col-md-2 control-label" for="senha">Senha</label>
-          <div class="col-md-6">
-            <input class="form-control" id="senha" formControlName="senha" type="password" placeholder="Senha (requerido)" />
-            <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.senha" *ngIf="displayMessage.senha">
-            </app-template-control-form-error>
-          </div>
+              <app-template-form-control-summary [errors]="errors"></app-template-form-control-summary>
+
+              <div class="form-row">
+                <div class="form-group col-xs-6 col-md-6">
+                  <label class="form-control-label" for="senhaAtual">Senha Atual</label>
+                  <input [ngClass]="aplicarCssErro(displayMessage.senhaAtual)" class="form-control" id="senhaAtual" formControlName="senhaAtual" type="password" placeholder="Senha Atual (requerido)" />
+                  <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.senhaAtual" *ngIf="displayMessage.senhaAtual">
+                  </app-template-control-form-error>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-xs-6 col-md-6">
+                  <label class="form-control-label" for="senha">Senha</label>
+                  <input [ngClass]="aplicarCssErro(displayMessage.senha)" class="form-control" id="senha" formControlName="senha" type="password" placeholder="Senha (requerido)" />
+                  <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.senha" *ngIf="displayMessage.senha">
+                  </app-template-control-form-error>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-xs-6 col-md-6">
+                  <label class="form-control-label" for="confirmeSenha">Confirme a Senha</label>
+                  <input [ngClass]="aplicarCssErro(displayMessage.confirmeSenha)" class="form-control" id="confirmeSenha" formControlName="confirmeSenha" type="password" placeholder="Confirme a Senha" />
+                  <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.confirmeSenha" *ngIf="displayMessage.confirmeSenha">
+                  </app-template-control-form-error>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-xs-6 col-md-6">
+                  <span><button class="btn btn-success" type="submit" [disabled]="loading">Alterar</button></span>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
-
-        <div class="form-group" [ngClass]="aplicarCssErro(displayMessage.confirmeSenha)">
-          <label class="col-md-2 control-label" for="confirmeSenha">Confirme a Senha</label>
-          <div class="col-md-6">
-            <input class="form-control" id="confirmeSenha" formControlName="confirmeSenha" type="password" placeholder="Confirme a Senha" />
-            <app-template-control-form-error [notInline]="false" [msgError]="displayMessage.confirmeSenha" *ngIf="displayMessage.confirmeSenha">
-            </app-template-control-form-error>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-4 col-md-offset-2">
-            <span><button class="btn btn-success" type="submit" [disabled]="!formulario.valid || loading">Registrar</button></span>
-          </div>
-        </div>
-
       </div>
-    </form>
   </div>
 </div>

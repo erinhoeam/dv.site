@@ -1,0 +1,13 @@
+<nav aria-label="Page navigation example" *ngIf="totalRegistros > qtdPorPagina">
+  <ul class="pagination justify-content-end">
+    <li class="page-item" *ngIf="pagina!==1">
+      <a class="page-link" (click)="paginar(pagina-1, $event)" href="#" tabindex="-1">Anterior</a>
+    </li>
+
+    <li *ngFor="let i of paginas" [ngClass]="{'active': i===pagina}" class="page-item"><a (click)="paginar(i, $event)" class="page-link" href="#">{{ i }}</a></li>
+
+    <li class="page-item" (click)="paginar(pagina+1, $event)" *ngIf="exibirProximo">
+      <a class="page-link" href="#">Próximo</a>
+    </li>
+  </ul>
+</nav>

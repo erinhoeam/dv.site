@@ -1,27 +1,38 @@
-<app-menu-superior></app-menu-superior>
-<div class="row">
-  <div class="col-sm-3 col-md-2 sidebar">
-    <app-sidebar></app-sidebar>
+<div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <app-menu-superior></app-menu-superior>      
+      </div>
   </div>
-  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h1 class="page-header">{{title}}</h1>
-    <a class="btn btn-primary" routerLink="/aplicacao/novo" >Nova Aplicação</a>
-    <br /><br />
-    <table class="table table-striped" *ngIf="aplicacoes != null && aplicacoes.length>0">
-      <tr>
-        <th>Aplicação</th>
-        <th>Editar</th>
-        <th>Excluir</th>
-      </tr>
-      <tbody>
-        <tr *ngFor='let item of aplicacoes'>
-            <td width="90%">{{item.nome}}</td>
-            <td width="5%"><a [routerLink]="['/aplicacao/editar/' + item.id]" class="btn btn-primary">
-            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></td>
-            <td width="5%"><a [routerLink]="['/aplicacao-form/' + item.id]" class="btn btn-primary">
-            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <div class="col-sm-3 col-md-2 col-lg-2 col-xl-2 sidebar">
+      <app-sidebar></app-sidebar>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2 col-xl-10 col-xl-offset-2 main">
+      <div class="card bg-light mb-3">
+        <div class="card-header">
+          <i class="fa fa-list-ul"></i> <span class="bold">{{title}}</span>
+        </div>
+        <div class="card-body">
+          <a class="btn btn-primary" [routerLink]="['/aplicacao/novo']" >Nova Aplicação</a>
+          <br /><br />
+          <table class="table table-striped table-hover table-responsive" *ngIf="aplicacoes != null && aplicacoes.length>0">
+            <tr>
+              <th scope="col">Aplicação</th>
+              <th scope="col">Editar</th>
+              <th scope="col">Excluir</th>
+            </tr>
+            <tbody>
+              <tr *ngFor='let item of aplicacoes'>
+                  <td>{{item.nome}}</td>
+                  <td><a [routerLink]="['/aplicacao/editar/' + item.id]" class="btn btn-primary">
+                  <span class="fa fa-edit" aria-hidden="true"></span></a></td>
+                  <td><a [routerLink]="['/aplicacao-form/' + item.id]" class="btn btn-primary">
+                  <span class="fa fa-trash" aria-hidden="true"></span></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
   </div>
 </div>

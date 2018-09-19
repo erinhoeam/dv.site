@@ -4,6 +4,7 @@ import { FormsModule }  from '@angular/forms';
 //Modules
 import { SharedModule } from './../shared/shared.module';
 import { LoginRoutingModule } from './login.routing.module';
+import { FacebookModule } from 'ngx-facebook';
 
 //Components
 import { LoginComponent } from './login.component';
@@ -14,7 +15,12 @@ import { UsuarioService } from './../services/usuario.service';
 import { LoginMainComponent } from './login-main/login-main.component';
 
 @NgModule({
-    imports: [FormsModule,SharedModule,LoginRoutingModule],
+    imports: [
+        FormsModule,
+        SharedModule,
+        LoginRoutingModule,
+        FacebookModule.forRoot()
+    ],
     exports: [],
     declarations: [LoginComponent,RecuperarSenhaComponent, LoginMainComponent],
     providers: [UsuarioService],

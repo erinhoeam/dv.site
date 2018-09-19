@@ -26,14 +26,20 @@ export class AuthService extends ServiceBase implements CanActivate {
             this.router.navigate(['/login/entrar']);
             return false;
         }
-
-        if (routeAc.data.lenght > 0) {
-            let claim = routeAc.data[0]['claim'];
-
+        
+        if (routeAc.data) {
+            let claim = routeAc.data[0];
             if (claim) {
-                let userClaims = this.user.claims.some(x => x.type === claim.nome && x.value === claim.valor);
+                
+                if(!this.user.claims){
+                    this.router.navigate(['/home/acesso-negado']);
+                    return;
+                }
+
+                let userClaims = this.user.claims.some(x => x.type === claim.claim.nome && x.value === claim.claim.valor);
+                
                 if (!userClaims) {
-                    this.router.navigate(['/acesso-negado']);
+                    this.router.navigate(['/home/acesso-negado']);
                     return;
                 }
             }

@@ -40,14 +40,14 @@ export class AplicacaoFormComponent extends BaseComponent implements OnInit, Aft
 
             this.validationMessages = {
               nome: {
-                  required: 'Nome requerido.',
-                  minlength: 'O Nome precisa ter no mínimo 2 caracteres.',
-                  maxlength: 'O Nome precisa ter no máximo 150 caracteres.'
+                required: this.message.messages.APLICACAO.NOME_REQUIRED,
+                minlength: this.message.messages.APLICACAO.NOME_MIN_LENGTH,
+                maxlength: this.message.messages.APLICACAO.NOME_MAX_LENGTH
               },
               classe: {
-                  required: 'Classe requerida.',
-                  minlength: 'O da classe precisa ter no mínimo 2 caracteres.',
-                  maxlength: 'O da classe precisa ter no máximo 50 caracteres.'
+                required: this.message.messages.APLICACAO.CLASSE_REQUIRED,
+                minlength: this.message.messages.APLICACAO.CLASSE_MIN_LENGTH,
+                maxlength: this.message.messages.APLICACAO.CLASSE_MAX_LENGTH
               }
             };
 
@@ -57,6 +57,7 @@ export class AplicacaoFormComponent extends BaseComponent implements OnInit, Aft
   }
 
   ngOnInit() {
+
         this.formulario = this.fb.group({
           nome: ['', [Validators.required,
           Validators.minLength(2),
@@ -66,28 +67,33 @@ export class AplicacaoFormComponent extends BaseComponent implements OnInit, Aft
           Validators.maxLength(350)]],
           config: ''
         });
+
         this.inscricao = this.routeActivated.params.subscribe(
         (params:any) => {
             
             if(params['id']){
-              this.title = "Atualizar Aplicação";
+
+              this.title = this.message.titles.APLICACAO.TITLE_UPDATE;
+              this.icon = this.message.titles.ICON.EDIT;
 
               this.aplicacao.id = params['id'];
               
-              this.showToastrInfo('Carregando...');
+              this.showToastrInfo(this.message.messages.SHARED.MSG_LOADING);
 
               this.aplicacaoService.obter(this.aplicacao.id)
               .subscribe(
                   result => { this.onObterComplete(result) },
-                  error => { this.onSaveError(error) }
+                  error => { this.onError(error) }
               );
             }
             else{
-              this.title = "Nova Aplicação";
+              this.title = this.message.titles.APLICACAO.TITLE_NEW;
+              this.icon = this.message.titles.ICON.NEW;
             }
         }
     );
   }
+
   ngAfterViewInit(): void {
     let controlBlurs: Observable<any>[] = this.formInputElements
       .map((formControl: ElementRef) => Observable.fromEvent(formControl.nativeElement, 'blur'));
@@ -108,42 +114,41 @@ export class AplicacaoFormComponent extends BaseComponent implements OnInit, Aft
       let p = Object.assign({}, this.aplicacao, this.formulario.value);
       p.id = this.aplicacao.id;
       
-      this.showToastrInfo('Salvando...');
+      this.showToastrInfo(this.message.messages.SHARED.MSG_SAVING);
+
       if (this.aplicacao.id){
+
           this.aplicacaoService.atualizar(p)
           .subscribe(
-          result => { this.onSaveComplete(result) },
-          error => { this.onSaveError(error) });
+          result => { this.onCompleteSuccess(result, 
+            this.message.messages.SHARED.MSG_SAVE_SUCCESS ,
+            this.message.routes.APLICACAO.LISTAR) },
+          error => { this.onError(error) });
+
       }
       else
       {
           this.aplicacaoService.novo(p)
           .subscribe(
-          result => { this.onSaveComplete(result) },
-          error => { this.onSaveError(error) });
+          result => { this.onCompleteSuccess(result, 
+            this.message.messages.SHARED.MSG_SAVE_SUCCESS ,
+            null) },
+          error => { this.onError(error) });
       }
 
     }
+    else{
+      this.verificaValidacoesForm(this.formulario);
+      this.displayMessage = this.genericValidator.processMessages(this.formulario);
+    }
   }
-  onSaveComplete(response: any) {
-    this.hideToastrInfo();
-    this.errors = [];
-    this.showToastrSuccess('Salvo com sucesso!','DV','/aplicacao/listar');
-  }
-
-  onSaveError(error: any) 
-  {
-    if(this.verifyUnauthorized(error)) return;
-    this.hideToastrInfo();
-    this.showToastrError('Falha ao realizar o cadastro!',error);
-  }
-
+  
   onObterComplete(response: Aplicacao) {
     this.loading = false;
     this.hideToastrInfo();
     this.errors = [];
     this.aplicacao = response;
-     this.formulario.setValue({
+     this.formulario.patchValue({
        nome: this.aplicacao.nome,
        classe:this.aplicacao.classe,
        config: this.aplicacao.config
